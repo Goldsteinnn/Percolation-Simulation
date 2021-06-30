@@ -135,6 +135,7 @@ public class Percolation {
     	return id.connected(virtualTop, virtualBottom);
     }
     
+    //Displays current grid
     private void showGrid() {
     	for(int i = 1; i < N+1; i++) {
     		for(int j = 1; j < N+1; j++ ) {
@@ -143,8 +144,16 @@ public class Percolation {
     		}
     		System.out.println();
     	}
-    	
-    	
+    }
+    
+    public void simulate() {
+    	int row, col;
+    	while(!percolates()) {
+    		row = StdRandom.uniform(1,N+1);
+    		col = StdRandom.uniform(1,N+1);
+    		open(row,col);
+    	}
+    	System.out.println("# of sites opened: " + numberOfOpenSites() + "/" + N*N);
     }
 
     // test client (optional)
@@ -152,15 +161,8 @@ public class Percolation {
     	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     	int N  = Integer.parseInt(br.readLine());
     	Percolation start = new Percolation(N);
-    	int row, col;
-    	while(!start.percolates()) {
-    		row = StdRandom.uniform(1,N+1);
-    		col = StdRandom.uniform(1,N+1);
-    		start.open(row,col);
-
-    	}
-    	start.showGrid();
-    	System.out.println("# of sites opened: " + start.numberOfOpenSites() + "/" + N*N);
+    	start.simulate();
+    	
     
     }
 }
