@@ -1,2 +1,1 @@
-"# Starting-Out-Collab" 
-"# Percolation-Simulation" 
+In this project, I am creating a simulation on percolation. First a N x N grid is create and each site in the grid is originally closed. The sites on the grids will continue to randomly open until it percolates. 
