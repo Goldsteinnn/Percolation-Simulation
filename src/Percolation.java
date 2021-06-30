@@ -1,3 +1,7 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
@@ -5,13 +9,17 @@ public class Percolation {
 	private int grid[];
 	private int N; 
 	private WeightedQuickUnionUF id;
-	private int virtualTop = 25;
-	private int virtualBottom = 26;
+	private int virtualTop;
+	private int virtualBottom;
+	private int count;
 	
 	  // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {
+    	count = 0;
     	N = n;
     	grid = new int[N*N];
+    	virtualTop = N * N;
+    	virtualBottom = N * N + 1;
     	//Virtual top site will be index 25 and virtual bottom site will be index 26
     	id = new WeightedQuickUnionUF(N * N + 2);
     	for(int i = 0; i < grid.length; i++ ) {
@@ -23,15 +31,17 @@ public class Percolation {
     // opens the site (row, col) if it is not open already
     public void open(int row, int col) {
     	int indx = getIndex(row,col);
-    	if(isOpen(row,col)) {
+    	if(!isOpen(row,col)) {
     		grid[indx] = 1;
+    		count++;
     		createUnion(row,col);
     		
     	}
     	if(row == 1) {
     		id.union(indx, virtualTop);
     	}
-    	else if(row == N) {
+    	if(row == N) {
+    		
     		id.union(indx, virtualBottom);
     	}
     }
@@ -39,7 +49,7 @@ public class Percolation {
     // is the site (row, col) open?
     public boolean isOpen(int row, int col) {
     	int indx = getIndex(row,col);
-    	if(grid[indx] == 0) {
+    	if(grid[indx] == 1) {
     		return true;
     	}
     	return  false;
@@ -47,7 +57,7 @@ public class Percolation {
     
     //Get the index equivalent corresponding to the rows and column
     private int getIndex(int row, int col) {
-    	return (N *(col - 1)) + (row - 1);
+    	return (N *(row - 1)) + (col - 1);
     }
     
     //creates a union with open neighbors
@@ -59,6 +69,7 @@ public class Percolation {
     	lSite = isValidSite(row,col-1);
     	uSite = isValidSite(row-1,col);
     	dSite = isValidSite(row+1,col);
+    	//System.out.println("rSite, lSite, uSite, dSite: " + rSite + " " + lSite + " " + uSite + " " + dSite);
     	
     	//Create connection between current site and neighbors
     	if(rSite) {
@@ -71,6 +82,7 @@ public class Percolation {
     		lOpen = isOpen(row,col-1);
     		if(lOpen) {
     			id.union(indx, getIndex(row,col-1));
+    			
     		}
     	}
     	if(uSite) {
@@ -80,7 +92,7 @@ public class Percolation {
     		}
     	}
     	if(dSite) {
-    		dOpen = isOpen(row+1,col+1);
+    		dOpen = isOpen(row+1,col);
     		if(dOpen) {
     			id.union(indx, getIndex(row+1,col));
     		}
@@ -113,16 +125,14 @@ public class Percolation {
     // returns the number of open sites
     public int numberOfOpenSites() {
     	
-    	return 0;
+    	return count;
     }
 
     // does the system percolate?
     @SuppressWarnings("deprecation")
 	public boolean percolates() {
-    	if(id.connected(virtualTop, virtualBottom)) {
-    		return true;
-    	}
-    	return false;
+    	//return id.connected(virtualTop, virtualBottom);
+    	return id.connected(virtualTop, virtualBottom);
     }
     
     private void showGrid() {
@@ -138,14 +148,19 @@ public class Percolation {
     }
 
     // test client (optional)
-    public static void main(String[] args) {
-    	Percolation start = new Percolation(5);
+    public static void main(String[] args) throws NumberFormatException, IOException {
+    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    	int N  = Integer.parseInt(br.readLine());
+    	Percolation start = new Percolation(N);
+    	int row, col;
     	while(!start.percolates()) {
-    		start.open(StdRandom.uniform(1, 5),StdRandom.uniform(1, 5));
-    		start.showGrid();
-    		System.out.println();
+    		row = StdRandom.uniform(1,N+1);
+    		col = StdRandom.uniform(1,N+1);
+    		start.open(row,col);
+
     	}
     	start.showGrid();
+    	System.out.println("# of sites opened: " + start.numberOfOpenSites() + "/" + N*N);
     
     }
 }
