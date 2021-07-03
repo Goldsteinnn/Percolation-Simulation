@@ -115,7 +115,6 @@ public class Percolation {
     }
 
     // is the site (row, col) full?
-    @SuppressWarnings("deprecation")
 	public boolean isFull(int row, int col) {
     	int indx = getIndex(row, col);
     	if(id.connected(indx, virtualTop)) {
@@ -132,7 +131,6 @@ public class Percolation {
     }
 
     // does the system percolate?
-    @SuppressWarnings("deprecation")
 	public boolean percolates() {
     	//return id.connected(virtualTop, virtualBottom);
     	return id.connected(virtualTop, virtualBottom);
