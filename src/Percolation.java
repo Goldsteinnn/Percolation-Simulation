@@ -15,6 +15,9 @@ public class Percolation {
 	
 	  // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {
+    	if(n <= 0) {
+    		throw new IllegalArgumentException("Given N<=0");
+    	}
     	count = 0;
     	N = n;
     	grid = new int[N*N];
@@ -153,7 +156,6 @@ public class Percolation {
     		col = StdRandom.uniform(1,N+1);
     		open(row,col);
     	}
-    	System.out.println("# of sites opened: " + numberOfOpenSites() + "/" + N*N);
     }
 
     // test client (optional)
