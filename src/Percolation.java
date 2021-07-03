@@ -149,22 +149,14 @@ public class Percolation {
     	}
     }
     
-    public void simulate() {
-    	int row, col;
-    	while(!percolates()) {
-    		row = StdRandom.uniform(1,N+1);
-    		col = StdRandom.uniform(1,N+1);
-    		open(row,col);
-    	}
-    }
 
     // test client (optional)
-    public static void main(String[] args) throws NumberFormatException, IOException {
+    /*public static void main(String[] args) throws NumberFormatException, IOException {
     	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     	int N  = Integer.parseInt(br.readLine());
     	Percolation start = new Percolation(N);
     	start.simulate();
     	
     
-    }
+    }*/
 }
